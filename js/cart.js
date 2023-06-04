@@ -1,22 +1,11 @@
-if(document.readyState == 'loading'){
-  document.addEventListener('DOMContentLoaded',ready);
-}else{
-  ready();
-}
-
-function ready() {
-  const jumlahEls = document.getElementsByClassName('browser-default');
-
-  for(let jumlahEl of jumlahEls){
-    jumlahEl.addEventListener('change', function(e){
-      const el = e.target;
-      const value = e.target.value;
-      if(value == 0){
-        el.parentElement.parentElement.remove();
-      }
-      updateTotal();
-    });
+const updateCart = (e) => {
+  const el = e.target;
+  let value = e.target.value;
+  if(value <= 0 || isNaN(value)){
+    el.parentElement.parentElement.remove();
+    value = 1;
   }
+  updateTotal();
 }
 
 const updateTotal = () => {
@@ -33,5 +22,19 @@ const updateTotal = () => {
     total += (hargaVal * jumlahVal);
   }
 
-  totalEl.value = `${total}.000.000,-`;
+  totalEl.value = `${convertToRupiah(total)}.000.000,-`;
+}
+
+const ready = () => {
+  const jumlahEls = document.getElementsByClassName('browser-default');
+
+  for(let jumlahEl of jumlahEls){
+    jumlahEl.addEventListener('change', updateCart);
+  }
+}
+
+if(document.readyState == 'loading'){
+  document.addEventListener('DOMContentLoaded',ready);
+}else{
+  ready();
 }
